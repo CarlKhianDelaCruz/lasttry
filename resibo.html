@@ -1,0 +1,95 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <style>
+        body {
+            background-color: #0000FF;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #FFFFFF;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        .checkmark {
+            background-color: #0000FF;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .checkmark i {
+            color: #FFFFFF;
+            font-size: 24px;
+        }
+        .amount-section, .total-section {
+            margin: 20px 0;
+        }
+        .amount-section div, .total-section div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .amount-section div span, .total-section div span {
+            font-size: 18px;
+            color: #000000;
+        }
+        .total-section div span:last-child {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="checkmark">
+            <i class="fas fa-check"></i>
+        </div>
+        <div class="amount-section">
+            <div>
+                <span>Amount</span>
+                <span id="amount">₱0.00</span>
+            </div>
+        </div>
+        <div class="total-section">
+            <div>
+                <span>Total</span>
+                <span id="total-amount">₱0.00</span>
+            </div>
+        </div>
+        <p>Your payment was successful!</p>
+    </div>
+
+    <script>
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const currentUserId = localStorage.getItem("currentUserId");
+        const currentUser = users.find(user => user.id == currentUserId);
+    
+        if (currentUser && currentUser.transactions.length > 0) {
+            const latestTransaction = currentUser.transactions[currentUser.transactions.length - 1];
+            document.getElementById("amount").innerText = latestTransaction.amount;
+            document.getElementById("total-amount").innerText = latestTransaction.amount;
+        } else {
+            alert("No transaction found!");
+        }
+    </script>
+    
+</body>
+</html>

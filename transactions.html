@@ -1,0 +1,176 @@
+<html>
+<head>
+    <title>Transaction History</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            width: 375px;
+            margin: 0 auto;
+            border: 1px solid #000;
+            background-color: #fff;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .profile {
+            background-color: #002366;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .profile img {
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+        }
+        .profile h2 {
+            margin: 10px 0 5px 0;
+            font-size: 20px;
+        }
+        .profile p {
+            margin: 0;
+            font-size: 14px;
+        }
+        .transaction-history {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .transaction {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .transaction-date {
+            background-color: #0056b3;
+            color: white;
+            padding: 5px;
+            font-weight: bold;
+        }
+        .transaction-time {
+            font-size: 12px;
+            color: #555;
+        }
+        .transaction-description {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        .transaction-amount {
+            font-size: 16px;
+            color: green;
+            text-align: right;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            background-color: #002366;
+            padding: 10px 0;
+        }
+        .footer div {
+            text-align: center;
+            color: white;
+        }
+        .footer i {
+            font-size: 24px;
+        }
+        .footer p {
+            margin: 5px 0 0 0;
+            font-size: 12px;
+        }  
+        a {
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile">
+            <img src="https://placehold.co/60x60" alt="Profile picture">
+            <h2></h2>
+            <p></p>
+        </div>
+        <div class="transaction-history">Transaction History</div>
+        <div id="transaction-list"></div>
+        <div class="footer">
+            <div>
+              <a href="transactions.html">
+                <i class="fas fa-receipt"></i>
+                <p>Transactions</p>
+              </a>
+            </div>
+            <div>
+                <a href="homepage.html">
+                    <i class="fas fa-home"></i>
+                    <p>Home</p>
+                </a>
+            </div>
+            <div>
+               <a href="profile.html">
+                <i class="fas fa-user"></i>
+                <p>Profile</p>
+               </a>
+            </div>
+        </div>
+    </div>
+ <script>
+        window.onload = function() {
+    const currentUserId = localStorage.getItem("currentUserId");
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const currentUser = users.find(user => user.id == currentUserId);
+
+    if (currentUser) {
+        const profileImage = currentUser.profileImage || "https://placehold.co/60x60"; // Default placeholder
+        const name = `${currentUser.firstName} ${currentUser.lastName}`;
+        const phoneNumber = currentUser.phoneNumber;
+
+        document.querySelector("img[alt='Profile picture']").src = profileImage;
+        document.querySelector("h2").textContent = name;
+        document.querySelector("p").textContent = phoneNumber;
+    } else {
+        alert("No user is logged in!");
+        window.location.href = "login.html"; // Redirect to login page
+    }
+};
+
+    </script>
+    <script>
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const currentUserId = localStorage.getItem("currentUserId");
+        const currentUser = users.find(user => user.id == currentUserId);
+    
+        const transactionList = document.getElementById("transaction-list");
+    
+        if (currentUser && currentUser.transactions.length > 0) {
+            currentUser.transactions.forEach(transaction => {
+                transactionList.innerHTML += `
+                    <div class="transaction">
+                        <div class="transaction-date">${transaction.date}</div>
+                        <div class="transaction-time">${transaction.time}</div>
+                        <div class="transaction-description">${transaction.description}</div>
+                        <div class="transaction-amount">${transaction.amount}</div>
+                    </div>
+                `;
+            });
+        } else {
+            transactionList.innerHTML = "<p>No transactions available.</p>";
+        }
+    </script>
+    
+</body>
+</html>
+

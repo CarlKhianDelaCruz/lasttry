@@ -1,0 +1,382 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .container {
+            padding: 20px;
+        }
+        .profile-picture {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .profile-picture img {
+    display: block; /* Makes the image a block element for centering */
+    margin: 0 auto; /* Centers the image horizontally */
+    width: 80px;
+    height: 80px;
+    border-radius: 50%; /* Optional: Keeps the image circular */
+}
+
+        .edit-button {
+            display: block;
+            margin: 10px auto;
+            background-color: rgba(255, 255, 255, 0.7);
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .info-section {
+            margin-bottom: 20px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .info-section div {
+            margin-bottom: 10px;
+        }
+        .info-section div span {
+            display: block;
+            font-weight: bold;
+            color: gray;
+        }
+        .info-section div p {
+            margin: 0;
+        }
+        .social-accounts input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .social-accounts input:disabled {
+            background-color: #f0f0f0;
+            color: #000;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            background-color: #007bff;
+            padding: 10px 0;
+
+            bottom: 0;
+            width: 100%;
+        }
+        .footer div {
+            text-align: center;
+            color: white;
+        }
+        .footer div i {
+            display: block;
+            font-size: 20px;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            .profile-picture img {
+                width: 80px;
+                height: 80px;
+            }
+            .edit-button {
+                padding: 8px 16px;
+            }
+            .social-accounts input {
+                padding: 8px;
+            }
+        }
+        .footer a {
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            font-size: 14px;
+        }
+        .footer a i {
+            display: block;
+            font-size: 20px;
+        }
+        .delete-popup, .terms-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .delete-popup .content, .terms-popup .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+        }
+        .delete-popup .content .message, .terms-popup .content p {
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        .delete-popup .content .button {
+            display: block;
+            width: 200px;
+            padding: 15px;
+            margin: 10px auto;
+            border-radius: 25px;
+            font-size: 16px;
+            text-decoration: none;
+            text-align: center;
+        }
+        .delete-popup .content .delete-button {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+        }
+        .delete-popup .content .cancel-button {
+            background-color: white;
+            color: black;
+            border: 1px solid #6c757d;
+        }
+        .terms-popup .content h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .close-icon {
+            position: absolute;
+            top: 50px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Profile</h1>
+    </div>
+    <div class="container">
+        <div class="profile-picture">
+            <img id="profileImage" src="https://storage.googleapis.com/a1aa/image/sCbWgIhqYb4iDlbWNffCpZ8EneRuTwDQejS4IeSKv7fZBjM8E.jpg" alt="Profile Picture">
+            <input id="imageUpload" type="file" style="display: none;">
+            <button class="edit-button">Edit</button>
+        </div>
+        <div class="info-section">
+            <div>
+                <span>NAME</span>
+                <p id="name"></p>
+            </div>
+            <div>
+                <span>PHONE NUMBER</span>
+                <p id="phone"></p>
+            </div>
+            <div>
+                <span>BIRTH DATE</span>
+                <p id="birthdate"></p>
+            </div>
+            <div>
+                <span>EMAIL ADDRESS</span>
+                <p id="email"></p>
+            </div>
+            <div>
+                <span>CURRENT ADDRESS</span>
+                <p id="address"></p>
+            </div>
+        </div>
+        <div class="social-accounts">
+            <input type="text" id="facebookLink" placeholder="Link Facebook" readonly>
+            <input type="text" id="instagramLink" placeholder="Link Instagram" readonly>
+            <input type="text" id="twitterLink" placeholder="Link Twitter" readonly>
+        </div>
+        <div class="max-w-md mx-auto mt-10">
+            <div class="bg-gray-300 p-4 flex items-center justify-between border-b border-gray-400 cursor-pointer" id="termsButton">
+                <div class="flex items-center">
+                    <i class="fas fa-file-alt text-xl"></i>
+                    <span class="ml-4 text-lg">Terms and Conditions</span>
+                </div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="bg-gray-300 p-4 flex items-center justify-between border-b border-gray-400">
+                <div class="flex items-center">
+                    <i class="fas fa-question-circle text-xl"></i>
+                    <span class="ml-4 text-lg">Help</span>
+                </div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="bg-gray-300 p-4 flex items-center justify-between border-b border-gray-400">
+                <div class="flex items-center">
+                    <i class="fas fa-cog text-xl"></i>
+                    <span class="ml-4 text-lg">Settings</span>
+                </div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="bg-gray-300 p-4 flex items-center justify-between border-b border-gray-400">
+                <div class="flex items-center" id="logoutButton">
+                    <i class="fas fa-sign-out-alt text-xl"></i>
+                    <span class="ml-4 text-lg">Log Out</span>
+                </div>
+                
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="bg-gray-300 p-4 flex items-center justify-between cursor-pointer" id="deleteAccountButton">
+                <div class="flex items-center">
+                    <i class="fas fa-user-times text-xl"></i>
+                    <span class="ml-4 text-lg">Delete Account</span>
+                </div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div>
+            <a href="transactions.html"><i class="fas fa-file-alt"></i></a>
+            <p>Transactions</p>
+        </div>
+        <div>
+           <a href="homepage.html"> <i class="fas fa-home" ></i></a>
+            <p>Home</p>
+        </div>
+        <div>
+            <i class="fas fa-user"></i>
+            <p>Profile</p>
+        </div>
+    </div>
+
+    <div class="delete-popup" id="deletePopup">
+        <div class="content">
+            <div class="header">Delete Account</div>
+            <div class="container">
+                <div class="message">
+                    Click the 'Delete Account' button again to confirm that you want to delete your account.
+                </div>
+                <a href="#" class="button delete-button">Delete Account</a>
+                <a href="#" class="button cancel-button" id="cancelButton">Cancel</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="terms-popup" id="termsPopup">
+        <div class="content">
+            <i class="fas fa-times close-icon" id="closeTerms"></i>
+            <div class="header">Terms and Conditions</div>
+            <div class="container">
+                <h1>IFO Terms and Conditions</h1>
+                <p>The IFO (Easing Financial Obligations) is an application that allows potential users to purchase items, buy food, pay hospital bills, or cover tuition fees. Instead of providing direct cash loans, it pays for eligible expenses through QR code payments.</p>
+                <p>With IFO, your loan is structured in installments, and you can choose a preferred payment frequency and percentage from options available in the app, all with 0% interest.</p>
+                <p>If you miss three payments, we will contact you to discuss your reasons. If the reasons are deemed valid, we may offer an extension. However, if not, we will take legal action, which could include suing you or seizing property, depending on the size of the unpaid debt.</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.onload = function() {
+            // Load current user data from localStorage
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+            const currentUserId = localStorage.getItem("currentUserId");
+            const currentUser = users.find(user => user.id == currentUserId);
+    
+            if (currentUser) {
+                document.getElementById('name').textContent = `${currentUser.firstName} ${currentUser.lastName}`;
+                document.getElementById('phone').textContent = currentUser.phoneNumber || "N/A";
+                document.getElementById('email').textContent = currentUser.email || "N/A";
+                document.getElementById('birthdate').textContent = currentUser.birthDate || "N/A";
+                document.getElementById('address').textContent = currentUser.address || "N/A";
+                
+                // Load saved profile image if it exists
+                const savedImage = localStorage.getItem("profileImage");
+                if (savedImage) {
+                    document.getElementById('profileImage').src = savedImage;
+                }
+            } else {
+                alert("No user logged in!");
+                window.location.href = "login.html"; // Redirect to login if no user is found
+            }
+        };
+    
+     // Logout functionality
+document.getElementById('logoutButton').addEventListener('click', function() {
+    localStorage.removeItem("currentUserId");  // Remove the logged-in user's reference
+    localStorage.removeItem("profileImage");   // Optionally clear the profile image if it's not needed after logout
+    window.location.href = 'login.html';       // Redirect to login page
+});
+
+    
+       // Edit profile picture
+document.querySelector('.edit-button').addEventListener('click', function() {
+    document.getElementById('imageUpload').click();
+});
+
+document.getElementById('imageUpload').addEventListener('change', function(event) {
+    const reader = new FileReader();
+    reader.onload = function() {
+        const img = document.getElementById('profileImage');
+        img.src = reader.result; // Update the profile image
+
+        // Save the selected image to localStorage
+        const currentUserId = localStorage.getItem("currentUserId");
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const currentUser = users.find(user => user.id == currentUserId);
+
+        if (currentUser) {
+            currentUser.profileImage = reader.result; // Save to current user's data
+            localStorage.setItem("users", JSON.stringify(users));
+        }
+    };
+    reader.readAsDataURL(event.target.files[0]);
+});
+
+        // Delete account functionality
+        document.getElementById('deleteAccountButton').addEventListener('click', function() {
+            document.getElementById('deletePopup').style.display = 'flex'; // Show confirmation popup
+        });
+    
+        document.getElementById('cancelButton').addEventListener('click', function() {
+            document.getElementById('deletePopup').style.display = 'none'; // Hide confirmation popup
+        });
+    
+        document.querySelector('.delete-button').addEventListener('click', function() {
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+            const currentUserId = localStorage.getItem("currentUserId");
+    
+            // Remove the current user from the users array
+            const updatedUsers = users.filter(user => user.id != currentUserId);
+    
+            // Save updated users array and clear current user data
+            localStorage.setItem("users", JSON.stringify(updatedUsers));
+            localStorage.removeItem("currentUserId");
+            localStorage.removeItem("profileImage");
+    
+            // Redirect to login page
+            alert("Account deleted successfully.");
+            window.location.href = 'login.html';
+        });
+    
+        // Terms popup functionality
+        document.getElementById('termsButton').addEventListener('click', function() {
+            document.getElementById('termsPopup').style.display = 'flex';
+        });
+    
+        document.getElementById('closeTerms').addEventListener('click', function() {
+            document.getElementById('termsPopup').style.display = 'none';
+        });
+    </script>
+    
+</body>
+</html>

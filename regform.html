@@ -1,0 +1,130 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(42, 157, 244, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #4a90e2;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+        .container h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .container p {
+            color: #d0e7ff;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        .container input[type="text"],
+        .container input[type="email"],
+        .container input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #000;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .container input[type="file"] {
+            padding: 5px;
+        }
+        .container label {
+            color: black;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .container .file-upload {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .container .file-upload input[type="file"] {
+            flex-grow: 1;
+        }
+        .container .file-upload i {
+            margin-left: 10px;
+            font-size: 20px;
+        }
+        .container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #d0e7ff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Registration Form</h1>
+        <p>Demographic and Personally Identifiable Information (PII).</p>
+        <input id="firstName" type="text" placeholder="First Name">
+        <input id="middleName" type="text" placeholder="Middle Name">
+        <input id="lastName" type="text" placeholder="Last Name">
+        <input id="birthDate" type="text" placeholder="Date of Birth">
+        <input id="phoneNumber" type="text" placeholder="Phone Number">
+        <input id="email" type="email" placeholder="Email">
+        <input id="address" type="text" placeholder="Address">
+        <label>Profile Picture</label>
+        <input id="profileImage" type="file">
+        <label>Government ID</label>
+        <div class="file-upload">
+            <input type="file">
+            <i class="fas fa-upload"></i>
+        </div>
+        <button id="nextButton" onclick="saveData()">NEXT</button>
+    </div>
+    <script>
+        function saveData() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const email = document.getElementById('email').value;
+    
+            if (!firstName || !lastName || !phoneNumber || !email) {
+                alert("Please fill in all fields!");
+                return;
+            }
+    
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+            const newUser = {
+                id: Date.now(),
+                firstName,
+                lastName,
+                phoneNumber,
+                email,
+                password: null, // Will be set during verification
+                transactions: []
+            };
+    
+            users.push(newUser);
+            localStorage.setItem("users", JSON.stringify(users));
+            localStorage.setItem("currentUserId", newUser.id);
+    
+            window.location.href = 'verification.html';
+        }
+    </script>
+    
+</body>
+</html>

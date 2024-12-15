@@ -1,0 +1,137 @@
+        <html>
+        <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+            <title>Registration Form</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #d3e0ff;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    margin: 0;
+                }
+                .container {
+                    background-color: #a3c1ff;
+                    border: 2px solid #0056b3;
+                    border-radius: 10px;
+                    padding: 20px;
+                    width: 90%;
+                    max-width: 400px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                }
+                .container h1 {
+                    background-color: #0056b3;
+                    color: white;
+                    text-align: center;
+                    padding: 10px;
+                    border-radius: 10px 10px 0 0;
+                    margin: -20px -20px 20px -20px;
+                }
+                .container label {
+                    display: block;
+                    margin-bottom: 5px;
+                    font-weight: bold;
+                }
+                .container input[type="text"],
+                .container input[type="password"] {
+                    width: calc(100% - 20px);
+                    padding: 10px;
+                    margin-bottom: 10px;
+                    border: 2px solid #000;
+                    border-radius: 5px;
+                    font-size: 16px;
+                    box-sizing: border-box;
+                }
+                .container .verified {
+                    background-color: #00ff00;
+                    color: white;
+                    text-align: center;
+                    padding: 10px;
+                    border-radius: 5px;
+                    font-weight: bold;
+                    margin-bottom: 20px;
+                }
+                .container .checkbox-container {
+                    display: flex;
+                    align-items: flex-start;
+                    margin-bottom: 20px;
+                }
+                .container .checkbox-container input[type="checkbox"] {
+                    margin-right: 10px;
+                    margin-top: 5px;
+                }
+                .container .checkbox-container label {
+                    font-weight: normal;
+                }
+                .container .checkbox-container a {
+                    color: #0000ff;
+                    text-decoration: none;
+                }
+                .container .checkbox-container a:hover {
+                    text-decoration: underline;
+                }
+                .container button {
+                    width: 100%;
+                    padding: 10px;
+                    background-color: #d3d3d3;
+                    border: none;
+                    border-radius: 5px;
+                    font-size: 16px;
+                    cursor: pointer;
+                }
+                .container button:hover {
+                    background-color: #c0c0c0;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Registration Form</h1>
+                <label>Enter the code sent to your email</label>
+                <input type="text" placeholder="Enter code">
+                <label>Enter the code sent to your phone number</label>
+                <input type="text" placeholder="Enter code">
+                <div class="verified">Verified</div>
+
+                <label>Password:</label>
+                <input type="password" placeholder="Enter your password">
+                <label>Confirm Password:</label>
+                <input type="password" placeholder="Confirm your password">
+                <div class="checkbox-container">
+                    <input type="checkbox">
+                    <label>By ticking, you are confirming that you have read, understood, and agree to the EFO (Easing Financial Obligations) <a href="#">terms and conditions</a>.</label>
+                </div>
+                <button onclick="location.href='profile.html'">Create</button>
+
+            </div>
+            <script>
+                function createAccount() {
+                    const password = document.querySelector("input[placeholder='Enter your password']").value;
+                    const confirmPassword = document.querySelector("input[placeholder='Confirm your password']").value;
+            
+                    if (password !== confirmPassword) {
+                        alert("Passwords do not match!");
+                        return;
+                    }
+            
+                    const users = JSON.parse(localStorage.getItem("users")) || [];
+                    const currentUserId = localStorage.getItem("currentUserId");
+                    const currentUser = users.find(user => user.id == currentUserId);
+            
+                    if (currentUser) {
+                        currentUser.password = password;
+                        localStorage.setItem("users", JSON.stringify(users));
+                        alert("Account created successfully!");
+                        window.location.href = "login.html";
+                    } else {
+                        alert("No user found to set the password.");
+                    }
+                }
+            </script>
+            
+        </body>
+        </html>
+

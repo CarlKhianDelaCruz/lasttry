@@ -1,0 +1,456 @@
+<html>
+ <head>
+  <title>
+   Loan Payment
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+  </script>
+  <style>
+   body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #007bff;
+            color: white;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 1px solid #000;
+        }
+        .header {
+            background-color: #007bff;
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+        .header img {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+        }
+        .header .name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .header .phone {
+            font-size: 14px;
+        }
+        .header .buttons {
+            margin-top: 10px;
+        }
+        .header .buttons button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .content {
+            padding: 20px;
+            color: black;
+        }
+        .content .balance {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .content .total-amount {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .content .options {
+            margin-bottom: 20px;
+        }
+        .content .options label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .content .options .option-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .content .options .option-group label {
+            flex: 1;
+            text-align: center;
+        }
+        .content .options .option-group input {
+            margin-right: 5px;
+        }
+        .content .save-button {
+            text-align: center;
+        }
+        .content .save-button button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .qr-code {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .confirm-button {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .confirm-button button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            background-color: #0056b3;
+            padding: 10px 0;
+        }
+        .footer a {
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            flex: 1;
+        }
+        .footer a i {
+            display: block;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .loading .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #007bff;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        .full-screen-loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            text-align: center;
+        }
+        .full-screen-loading .checkmark {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #28a745;
+            position: relative;
+            margin: 0 auto;
+        }
+        .full-screen-loading .checkmark::after {
+            content: '';
+            position: absolute;
+            left: 14px;
+            top: 22px;
+            width: 12px;
+            height: 24px;
+            border: solid white;
+            border-width: 0 4px 4px 0;
+            transform: rotate(45deg);
+        }
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        .back-icon {
+background: none;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+}
+.container {
+    position: relative;
+}
+.header {
+    position: relative;
+    padding-top: 40px; /* Adjust for space for the back button */
+}
+
+  </style>
+<script>
+    const balance = 50234.12;
+
+    function calculateInstallments() {
+        const percentage = document.querySelector('input[name="percentage"]:checked').value;
+        const frequency = document.querySelector('input[name="frequency"]:checked').value;
+
+        const installmentAmount = balance * (percentage / 100);
+        const installments = Math.floor(100 / percentage);  // You may need to update this logic
+
+        let schedule = [];
+        let currentDate = new Date();
+
+        for (let i = 0; i < installments; i++) {
+            // Update the logic for frequency (monthly, quarterly, etc.)
+            const incrementMonth = parseInt(frequency.split("_")[1]);  // Correctly parse frequency value
+            currentDate.setMonth(currentDate.getMonth() + incrementMonth);
+
+            // Ensure the date is valid before using it
+            const formattedDate = currentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+            // Check if the date is valid
+            if (isNaN(currentDate.getTime())) {
+                console.error("Invalid Date:", currentDate);
+                return;  // Prevent further processing if the date is invalid
+            }
+
+            // Push the calculated installment data to the schedule
+            schedule.push({
+                date: formattedDate,
+                amount: `₱${installmentAmount.toFixed(2)}`,
+                status: i === 0 ? 'Paid' : (i === 1 ? 'Active' : 'Disabled'),
+                installment: `${i + 1} of ${installments}`
+            });
+        }
+
+        localStorage.setItem('paymentSchedule', JSON.stringify(schedule)); // Save schedule to localStorage
+        window.location.href = 'summary.html';
+    }
+
+</script>
+
+
+  <script>
+   function generateRandomNumber() {
+            return Math.floor(Math.random() * 100000000000);
+        }
+
+        function validateAndShowQRCode() {
+            const percentageOptions = document.getElementsByName('percentage');
+            const frequencyOptions = document.getElementsByName('frequency');
+            let percentageSelected = false;
+            let frequencySelected = false;
+
+            for (let option of percentageOptions) {
+                if (option.checked) {
+                    percentageSelected = true;
+                    break;
+                }
+            }
+
+            for (let option of frequencyOptions) {
+                if (option.checked) {
+                    frequencySelected = true;
+                    break;
+                }
+            }
+
+            if (percentageSelected && frequencySelected) {
+                document.getElementById('loading').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('qr-code').style.display = 'block';
+                    document.getElementById('confirm-button').style.display = 'block';
+                    makeCode();
+                }, 3200);
+            } else {
+                alert('Please select both a percentage and a frequency option.');
+            }
+        }
+
+        function makeCode() {
+            var elText = document.getElementById("text");
+            var randomNumber = generateRandomNumber();
+            elText.value = "https://www.efopay.com/pay=user=?" + randomNumber;
+
+            var qrcode = new QRCode(document.getElementById("qrcode"), {
+                text: elText.value,
+                width: 150,
+                height: 150
+            });
+        }
+
+        function confirmPayment() {
+    // Call calculateInstallments before showing loading animation
+    calculateInstallments();
+
+    document.getElementById('full-screen-loading').style.display = 'flex';
+    setTimeout(() => {
+        document.getElementById('full-screen-loading').innerHTML = '<div class="checkmark"></div>';
+        document.querySelector('.checkmark').style.display = 'block';
+        setTimeout(() => {
+            window.location.href = 'summary.html';
+        }, 1000);
+    }, 4600);
+}
+
+  </script>
+ </head>
+ <body>
+   
+  <div class="container">
+   
+   <div class="header">
+    
+    <img alt="Profile picture" height="50" src="https://placehold.co/50x50" width="50"/>
+    <div class="name">
+     Christian Mercado
+    </div>
+    <div class="phone">
+     09077255427
+    </div>
+    <div class="buttons">
+     <button>
+      Customize Payment Information
+     </button>
+    </div>
+   </div>
+   <div class="content">
+    <div class="balance">
+     Balance
+    </div>
+    <div class="total-amount">
+        50,234.12
+    </div>
+    <div class="options">
+     <label>
+      Choose your preferred percentage to be paid on your loan from the available options below.
+     </label>
+     <div class="option-group">
+      <label>
+       <input name="percentage" type="radio" value="3"/>
+       3 percent
+      </label>
+      <label>
+       <input name="percentage" type="radio" value="10"/>
+       10 percent
+      </label>
+      <label>
+       <input name="percentage" type="radio" value="15"/>
+       15 percent
+      </label>
+     </div>
+     <div class="option-group">
+      <label>
+       <input name="percentage" type="radio" value="20"/>
+       20 percent
+      </label>
+      <label>
+       <input name="percentage" type="radio" value="25"/>
+       25 percent
+      </label>
+      <label>
+       <input name="percentage" type="radio" value="30"/>
+       30 percent
+      </label>
+     </div>
+    </div>
+    <div class="options">
+     <label>
+      Choose your preferred frequency to be paid on your loan from the available options below.
+     </label>
+     <div class="option-group">
+      <label>
+       <input name="frequency" type="radio" value="every_month"/>
+       Every month
+      </label>
+      <label>
+       <input name="frequency" type="radio" value="every_two_months"/>
+       Every two months
+      </label>
+      <label>
+       <input name="frequency" type="radio" value="every_three_months"/>
+       Every three months
+      </label>
+     </div>
+     <div class="option-group">
+      <label>
+       <input name="frequency" type="radio" value="every_four_months"/>
+       Every four months
+      </label>
+      <label>
+       <input name="frequency" type="radio" value="every_five_months"/>
+       Every five months
+      </label>
+      <label>
+       <input name="frequency" type="radio" value="every_six_months"/>
+       Every six months
+      </label>
+     </div>
+    </div>
+    <div class="save-button">
+     <button onclick="validateAndShowQRCode()">
+      Save
+     </button>
+    </div>
+    <div class="loading" id="loading">
+     <div class="spinner">
+     </div>
+    </div>
+    <div class="qr-code" id="qr-code">
+     <input id="text" readonly="" type="text" value="https://www.efopay.com/pay=user=?"/>
+     <div id="qrcode">
+     </div>
+    </div>
+    <div class="confirm-button" id="confirm-button">
+     <button onclick="confirmPayment()">
+      Confirm Payment
+     </button>
+    </div>
+   </div>
+   <div class="footer">
+    <a href="homepage.html">
+     <i class="fas fa-home">
+     </i>
+     Home
+    </a>
+    <a href="#">
+     <i class="fas fa-file-alt">
+     </i>
+     Info
+    </a>
+    <a href="#">
+     <i class="fas fa-user">
+     </i>
+     Profile
+    </a>
+   </div>
+  </div>
+  <div class="full-screen-loading" id="full-screen-loading">
+   <div class="spinner">
+   </div>
+  </div>
+ </body>
+</html>

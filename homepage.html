@@ -1,0 +1,180 @@
+<html>
+ <head>
+  <title>
+   Profile Page
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <style>
+   body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: rgba(42, 157, 244, 0.9);
+            color: white;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .profile {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #1E40AF;
+        }
+        .profile img {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+        .profile-info {
+            flex-grow: 1;
+            text-align: left;
+        }
+        .profile-info h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .profile-info p {
+            margin: 0;
+            font-size: 14px;
+        }
+        .profile button {
+            background-color: #3c71e2;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .card {
+            background-color: #1E40AF;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .card img {
+            width: 100px;
+            height: 100px;
+        }
+        .card p {
+            margin: 10px 0 0;
+            font-size: 18px;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-around;
+            background-color: #496bd8;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            font-size: 14px;
+        }
+       a {
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            font-size: 14px;
+        }
+        .navbar a i {
+            display: block;
+            font-size: 20px;
+        }
+  </style>
+ </head>
+ <body>
+  <div class="container">
+   <div class="profile">
+    <img alt="Profile picture" height="50" src="https://storage.googleapis.com/a1aa/image/GFJwzVfc7FWXHSqPJErgh4DVgLXKpwY8KZmAKaWfXwyR6RwTA.jpg" width="50"/>
+    <div class="profile-info">
+     <h2 class="user-name">
+      Christian Mercado
+     </h2>
+     <p class="number">
+      06977255427
+     </p>
+    </div>
+    <button onclick="window.location.href='customize_pay.html';">
+        Customize Payment Information
+      </button>
+      
+   </div>
+   <a href="pay_food.html">
+    <div class="card">
+      <img alt="Hospital Bill icon" height="100" src="food.png" width="100"/>
+      <p>ITEM/FOOD</p>
+    </div>
+  </a>
+   <a href="pay_hospital.html">
+    <div class="card">
+      <img alt="Hospital Bill icon" height="100" src="hospital.png" width="100"/>
+      <p>HOSPITAL BILL</p>
+    </div>
+  </a>
+  
+  <a href="pay_tuition.html">
+    <div class="card">
+      <img alt="Hospital Bill icon" height="100" src="tuition.png" width="100"/>
+      <p>TUITION</p>
+    </div>
+  </a>
+  </div>
+  <div class="navbar">
+   <a href="transactions.html">
+    <i class="fas fa-receipt">
+    </i>
+    Transactions
+   </a>
+   <a href="#">
+    <i class="fas fa-home">
+    </i>
+    Home
+   </a>
+   <a href="profile.html">
+    <i class="fas fa-user">
+    </i>
+    Profile
+   </a>
+  </div>
+  <script>
+    window.onload = function() {
+    const currentUserId = localStorage.getItem("currentUserId");
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const currentUser = users.find(user => user.id == currentUserId);
+
+    if (currentUser) {
+        const profileImage = currentUser.profileImage || "https://placehold.co/50x50"; // Default placeholder
+        document.querySelector("img[alt='Profile picture']").src = profileImage;
+    } else {
+        alert("No user is logged in!");
+        window.location.href = "login.html"; // Redirect to login page
+    }
+};
+
+  </script>
+  <script>
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const currentUserId = localStorage.getItem("currentUserId");
+    const currentUser = users.find(user => user.id == currentUserId);
+
+    if (currentUser) {
+        document.querySelector(".user-name").innerText = `${currentUser.firstName} ${currentUser.lastName}`;
+        document.querySelector(".number").innerText = currentUser.phoneNumber;
+    } else {
+        alert("No user is logged in!");
+        window.location.href = "login.html";
+    }
+</script>
+
+ </body>
+</html>

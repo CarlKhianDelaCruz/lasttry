@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <title>Login Form</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('https://wallpaperaccess.com/full/6188000.png') no-repeat center center;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            background-color: rgba(42, 157, 244, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #004494;
+        }
+
+        .signup {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .signup a {
+            color: #004494;
+            text-decoration: none;
+        }
+
+        .signup a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Log in</button>
+        <div class="signup">
+            Don’t have an account? <a href="regform.html">Sign up</a>
+        </div>
+    </div>
+
+    <script>
+        function login() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+    
+            if (!email || !password) {
+                alert("Please enter both email and password.");
+                return;
+            }
+    
+            // Retrieve the users array from localStorage
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+    
+            // Search for a user with the matching email and password
+            const currentUser = users.find(user => user.email === email && user.password === password);
+    
+            if (currentUser) {
+                alert("Login successful!");
+                // Set the current user ID for tracking logged-in user
+                localStorage.setItem("currentUserId", currentUser.id);
+                window.location.href = "homepage.html"; // Redirect to homepage
+            } else {
+                alert("Invalid email or password.");
+            }
+        }
+    </script>
+        
+</body>
+</html>

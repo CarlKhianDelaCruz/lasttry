@@ -1,0 +1,303 @@
+<html>
+ <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  <title>
+   Payment Page
+  </title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <style>
+   body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #007bff;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #0059b3;
+        }
+        .header img {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+        .header .info {
+            flex-grow: 1;
+        }
+        .header .info h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .header .info p {
+            margin: 0;
+            font-size: 14px;
+        }
+        .header .customize {
+            background-color: #007bff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        .content {
+            text-align: center;
+            padding: 20px;
+        }
+        .content img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        .content h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #000;
+        }
+        .payment-methods {
+            background-color: #fff;
+            color: #000;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px;
+            flex-grow: 1;
+        }
+        .payment-method {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .payment-method img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+        .payment-method .details {
+            flex-grow: 1;
+        }
+        .payment-method .details h4 {
+            margin: 0;
+            font-size: 16px;
+        }
+        .payment-method .details p {
+            margin: 0;
+            font-size: 14px;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            background-color: #0059b3;
+            padding: 10px 0;
+        }
+        .footer a {
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .footer a i {
+            display: block;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        #qr-code-container{
+
+margin-left: 130px;
+
+}
+  </style>
+ </head>
+ <body>
+  <div class="header">
+   <img alt="User profile picture" height="50" src="https://storage.googleapis.com/a1aa/image/N50to1OtjHLLNhWkjAAFRkI9ve9jh1LfKl47p7eQlqzsClhnA.jpg" width="50"/>
+   <div class="info">
+    <h2>
+     Christian Mercado
+    </h2>
+    <p>
+     09977255427
+    </p>
+   </div>
+   <div class="customize">
+    Customize Your Payment Instructions
+   </div>
+  </div>
+  
+  <div class="content">
+   <img alt="Item/Food image" height="100" src="hospital.png" width="100"/>
+   <h3>
+    HOSPITAL
+   </h3>
+  </div>
+  <div class="payment-methods">
+    <!-- Scan QR -->
+    <div class="payment-method" id="scan-qr">
+        <img alt="QR code scan icon" height="50" src="https://storage.googleapis.com/a1aa/image/sIkfP3X3KCxIMCxEy3cfUZLdczt7SYMfbrZBtDVFEFq1ClhnA.jpg" width="50"/>
+        <div class="details">
+            <h4>Pay by Scanning QR Code</h4>
+            <p>You can pay by scanning any QR code with your camera.</p>
+        </div>
+    </div>
+
+    <!-- Upload QR -->
+    <div class="payment-method" id="upload-qr">
+        <img alt="QR code upload icon" height="50" src="https://storage.googleapis.com/a1aa/image/SpXMio7tzzpCC5QTtJtYBsZYEI3wUB5jIEQnWn6OWX6VoM8E.jpg" width="50"/>
+        <div class="details">
+            <h4>Pay by Uploading the QR Code</h4>
+            <p>You can pay by uploading a QR code file from your device.</p>
+        </div>
+    </div>
+
+    <!-- Scan My QR -->
+    <div class="payment-method" id="scan-my-qr">
+        <img alt="QR code scan icon" height="50" src="https://storage.googleapis.com/a1aa/image/sIkfP3X3KCxIMCxEy3cfUZLdczt7SYMfbrZBtDVFEFq1ClhnA.jpg" width="50"/>
+        <div class="details">
+            <h4>Pay by Scanning Your QR Code</h4>
+            <p>You can pay by having the cashier scan your QR code.</p>
+        </div>
+    </div>
+</div>
+
+<!-- QR code display area -->
+<div id="generated-qr" style="display:none; text-align: center;">
+    <h4>Your QR Code</h4>
+    <div id="qr-code-container"></div>
+</div>
+<div class="confirm-button" id="confirm-button">
+    <button id="confirm-payment" >
+        Confirm Payment
+    </button>
+</div>
+
+<!-- File input for uploading QR code -->
+<input type="file" id="upload-input" style="display: none;" accept="image/*"/>
+
+  <div class="footer">
+   <a href="#">
+    <i class="fas fa-receipt">
+    </i>
+    Transaction
+   </a>
+   <a href="homepage.html">
+    <i class="fas fa-home">
+    </i>
+    Home
+   </a>
+   <a href="#">
+    <i class="fas fa-user">
+    </i>
+    Profile
+   </a>
+  </div>  <script src="https://cdn.jsdelivr.net/npm/jsQR@1.4.0/dist/jsQR.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  
+  <script>
+      // Scan QR Code functionality (using camera)
+      document.getElementById('scan-qr').addEventListener('click', function() {
+          if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+              navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+                  .then(function(stream) {
+                      const video = document.createElement('video');
+                      video.srcObject = stream;
+                      video.play();
+  
+                      // Once the video starts playing, start scanning the QR code
+                      video.onplay = function() {
+                          const canvas = document.createElement('canvas');
+                          const context = canvas.getContext('2d');
+                          document.body.appendChild(canvas);
+  
+                          function scan() {
+                              context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                              const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                              const code = jsQR(imageData.data, canvas.width, canvas.height);
+                              if (code) {
+                                  alert('QR Code Scanned: ' + code.data);
+                                  video.pause();
+                                  stream.getTracks().forEach(track => track.stop());  // Stop the video stream
+                                  canvas.remove();
+                              } else {
+                                  requestAnimationFrame(scan);
+                              }
+                          }
+                          scan();
+                      };
+                  })
+                  .catch(function(err) {
+                      alert('Error accessing the camera: ' + err);
+                  });
+          }
+      });
+  
+      // Upload QR Code functionality (prompt for file upload)
+      document.getElementById('upload-qr').addEventListener('click', function() {
+          document.getElementById('upload-input').click();
+      });
+  
+      document.getElementById('upload-input').addEventListener('change', function(e) {
+          const file = e.target.files[0];
+          if (file) {
+              const reader = new FileReader();
+              reader.onload = function(event) {
+                  const img = new Image();
+                  img.src = event.target.result;
+                  img.onload = function() {
+                      // You can add QR code detection here if needed (using jsQR or another method)
+                      alert('QR code uploaded');
+                  };
+              };
+              reader.readAsDataURL(file);
+          }
+      });
+  
+      // Generate Random QR Code functionality
+      document.getElementById('scan-my-qr').addEventListener('click', function() {
+          const randomData = Math.random().toString(36).substring(2);  // Generate random data for QR code
+          const qrCodeContainer = document.getElementById('qr-code-container');
+          qrCodeContainer.innerHTML = ''; // Clear previous QR if any
+  
+          new QRCode(qrCodeContainer, {
+              text: randomData,
+              width: 128,
+              height: 128
+          });
+  
+          document.getElementById('generated-qr').style.display = 'block';  // Show generated QR
+      });
+  </script>
+    <script>
+        document.getElementById("confirm-payment").addEventListener("click", () => {
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+            const currentUserId = localStorage.getItem("currentUserId");
+            const currentUser = users.find(user => user.id == currentUserId);
+    
+            if (currentUser) {
+                const randomAmount = `₱${(Math.random() * (20000 - 5000) + 5000).toFixed(2)}`;
+                const transaction = {
+                    date: new Date().toLocaleDateString(),
+                    time: new Date().toLocaleTimeString(),
+                    description: "Payment Transaction",
+                    amount: randomAmount
+                };
+    
+                currentUser.transactions.push(transaction);
+                localStorage.setItem("users", JSON.stringify(users));
+    
+                const resiboWindow = window.open("resibo.html", "_blank", "width=400,height=500");
+                setTimeout(() => {
+                    resiboWindow.close();
+                    window.location.href = "homepage.html";
+                }, 3000);
+            } else {
+                alert("No user is logged in!");
+            }
+        });
+    </script>
+    
+ </body>
+</html>
